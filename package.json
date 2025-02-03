@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "export NODE_NO_WARNINGS=1 && node ."
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "puppeteer": "^24.1.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "random-useragent": "^0.5.0",
+    "sqlite3": "^5.1.7",
+    "together-ai": "^0.13.0"
+  }
+}
