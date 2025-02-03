@@ -24,6 +24,43 @@ Webcrawler can crawl to any url, extract data, and perform analysis on the colle
 
 The web crawler leverages Puppeteer, a powerful headless browser automation tool, to navigate and extract data from web pages. The process involves several key steps and optimizations to ensure efficient and effective data extraction. Below is a detailed explanation of how the web crawler works, including the use of Puppeteer optimizations and the analysis of HTML content in chunks.
 
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'background': '#ffffff', 'primaryColor': '#6baed6', 'edgeLabelBackground':'#ffffff', 'nodeBorder':'#005f87', 'clusterBkg':'#eaf2f8', 'secondaryColor':'#9ecae1'}}}%%
+
+graph TD;
+    A[Initialization] -->|Setup Puppeteer| B[Crawling a Link]
+    B -->|Navigate to Page| C[Extracting HTML Content]
+    C -->|Split into Chunks| D[Analyzing Chunks]
+    D -->|Send to AI Model| E[Merging Results]
+    E -->|Combine JSON Responses| F[Returning Final Data]
+
+    subgraph Puppeteer Optimizations
+        G1[Stealth Plugin] -->|Bypass Bot Detection| C
+        G2[Random User-Agent] -->|Prevent Detection| C
+        G3[Proxy Rotation] -->|Avoid IP Blocking| B
+        G4[Request Interception] -->|Skip Unnecessary Resources| C
+        G5[Human-Like Behavior] -->|Simulate Mouse & Scroll| B
+        G6[Browser Verification Bypass] -->|Modify Navigator Properties| B
+    end
+
+    C -->|Chunk Processing| H[Processing Chunks Sequentially]
+    H -->|Send to AI Model| D
+    D -->|AI JSON Response| I[Sanitizing & Parsing JSON]
+    I -->|Clean Data| E
+
+    style A fill:#b3e5fc,stroke:#005f87,stroke-width:2px,color:#005f87;
+    style B fill:#81d4fa,stroke:#005f87,stroke-width:2px,color:#005f87;
+    style C fill:#4fc3f7,stroke:#005f87,stroke-width:2px,color:#005f87;
+    style D fill:#29b6f6,stroke:#005f87,stroke-width:2px,color:#005f87;
+    style E fill:#03a9f4,stroke:#005f87,stroke-width:2px,color:#ffffff;
+    style F fill:#0288d1,stroke:#005f87,stroke-width:2px,color:#ffffff;
+    style G1,G2,G3,G4,G5,G6 fill:#e1f5fe,stroke:#005f87,stroke-width:1px,color:#005f87;
+    style H fill:#80deea,stroke:#005f87,stroke-width:2px,color:#005f87;
+    style I fill:#26c6da,stroke:#005f87,stroke-width:2px,color:#ffffff;
+
+
+```
+
 ### Puppeteer Optimizations
 
 1. **Stealth Plugin**:
