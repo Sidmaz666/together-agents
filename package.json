@@ -5,6 +5,8 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jszip": "^3.10.1",
+    "pptxgenjs": "^3.12.0",
     "puppeteer": "^24.1.1",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",

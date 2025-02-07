@@ -1,11 +1,14 @@
 const express = require("express");
 const { PuppeteerService, analyze } = require("./webcrawler");
+const { PPTGenerator } = require("./ppt_generator");
 const config = require("./config");
+const path = require("path");
 
 const app = express();
 const port = 8080;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/webcrawler", async (req, res) => {
   // Handle the POST request to /webcrawler
@@ -37,6 +40,31 @@ app.post("/webcrawler", async (req, res) => {
     message: `${link} scrapped successfully!`,
   };
   res.status(200).json({ ...scrape_data });
+});
+
+app.post("/generate/ppt", async (req, res) => {
+  // Handle the POST request to /webcrawler
+  const data = req.body;
+  if (!data.prompt) {
+    res.status(400).json({
+      status: "error",
+      message: "Prompt is required!",
+    });
+  }
+  const prompt = data.prompt;
+  const generator = new PPTGenerator();
+  const start_time = Date.now();
+  const { success, fileName } = await generator.generatePresentation(prompt);
+  const ppt_data = {
+    success,
+    source: [config.models.meta_lang, config.models.flux],
+    user_prompt: prompt,
+    start_time,
+    end_time: Date.now(),
+    file: fileName,
+    message: `PPT generated successfully!`,
+  };
+  res.status(200).json({ ...ppt_data });
 });
 
 app.listen(port, () => {

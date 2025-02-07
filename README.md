@@ -1,30 +1,27 @@
 # Together-Agents
 
-Together-Agents is a set of Web AI Agents, currently it only consist of the `webcrawler` data analysis AI Agent. It leverages Puppeteer for web scraping and together-ai  free AI API's for scraped data analysis. The project is designed to support multiple routes providing a window to the web AI Agents. 
-
+Together-Agents is a set of Web AI Agents, currently it only consist of the `webcrawler` data analysis AI Agent and  `PPT Generator`. It leverages Puppeteer for web scraping and together-ai  free AI API's for scraped data analysis. The project is designed to support multiple routes providing a window to the web AI Agents.
 
 ## Table of Contents
 
 - [Webcrawler](#webcrawler)
-- [How it Wokrs?](#how-it-works)
-- [Features](#features)
+    - [Usage](#usage-webcrawler) 
+- [PPT Generator](#ppt-generator)
+    - [Usage](#usage-ppt-generator)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
-
-
 
 ## Webcrawler
 
 Webcrawler can crawl to any url, extract data, and perform analysis on the collected information. The web crawler is mildly optimized, using puppeteer-extra plugins, random-useragents, simulating human behaviour and real browser and using open source available proxies to vist any site.
-
 
 ## How it Works?
 
 The web crawler leverages Puppeteer, a powerful headless browser automation tool, to navigate and extract data from web pages. The process involves several key steps and optimizations to ensure efficient and effective data extraction. Below is a detailed explanation of how the web crawler works, including the use of Puppeteer optimizations and the analysis of HTML content in chunks.
 
 ```mermaid
+
 %%{init: {'theme':'base', 'themeVariables': {'background': '#ffffff', 'primaryColor': '#6baed6', 'edgeLabelBackground':'#ffffff', 'nodeBorder':'#005f87', 'clusterBkg':'#eaf2f8', 'secondaryColor':'#9ecae1'}}}%%
 
 graph TD;
@@ -57,8 +54,6 @@ graph TD;
     style G1,G2,G3,G4,G5,G6 fill:#e1f5fe,stroke:#005f87,stroke-width:1px,color:#005f87;
     style H fill:#80deea,stroke:#005f87,stroke-width:2px,color:#005f87;
     style I fill:#26c6da,stroke:#005f87,stroke-width:2px,color:#ffffff;
-
-
 ```
 
 ### Puppeteer Optimizations
@@ -123,15 +118,141 @@ The web crawler leverages Puppeteer to navigate web pages and extract HTML conte
 
 This approach ensures that the web crawler can efficiently and effectively extract data from web pages, even those with complex structures and anti-bot mechanisms.
 
-
-
-
 ## Features
 
 - Web crawling using Puppeteer and LLM
 - Data analysis utilities
 - Environment configuration with dotenv
 
+## Usage Webcrawler
+
+1. Start the application:
+   ```sh
+   npm start
+   ```
+
+2. The application will start at port 8080. You can do a post request to the `/webcrawler` route with the following payload.
+
+```json
+{
+  "link":"https://example.com",
+  "source" : 0, // 0 for Meta Llama 3.3 Turbo Instruct , 1 for DeepSeek R1
+  "prompt": "Please extract the following data:"
+}
+
+```
+
+<br/><br/>
+
+
+## PPT Generator
+
+The `ppt_generator` module is a powerful tool for generating PowerPoint presentations using AI models. It leverages the `together-ai` library for AI-driven content generation and the `PptxTemplateEngine` for creating presentation slides.
+
+### How it Works?
+
+The `ppt_generator` module uses AI models to generate the structure and content of PowerPoint presentations. The process involves several key steps:
+
+```mermaid
+graph TD;
+    A[Start] --> B[Initialize PPTGenerator];
+    B --> C[Generate Schema];
+    C -->|AI Model| D[Schema JSON Output];
+    D --> E[Generate Slides];
+    E -->|AI Model| F[Slide JSON Output];
+    F --> G{Does Slide Need Image?};
+    G -- Yes --> H[Generate Image];
+    H -->|AI Model| I[Image Path Output];
+    G -- No --> J[Skip Image Generation];
+    I --> K[Assemble Presentation];
+    J --> K;
+    K -->|Using PptxTemplateEngine| L[Final PPTX Output];
+    L --> M[Save PPT to Public Directory];
+    M --> N[End];
+
+    subgraph AI Process
+        C
+        E
+        H
+    end
+```
+
+1. **Initialization**:
+   - The `PPTGenerator` class is initialized with various settings, including the AI client, models, and system prompts.
+
+2. **Generating Schema**:
+   - The `generateSchema` method sends a prompt to the AI model to generate the overall structure of the presentation, including the number of slides and their types.
+
+3. **Generating Slides**:
+   - The `generateSlide` method generates the content for each slide based on the schema. It sends the slide title and description to the AI model, which returns a JSON object representing the slide's layout and content.
+
+4. **Generating Images**:
+   - The `generateImage` method generates images based on text prompts using the AI model. It returns the path to the generated image.
+
+5. **Assembling the Presentation**:
+   - The `generatePresentation` method assembles the slides into a final PowerPoint presentation using the `PptxTemplateEngine`. It handles the layout and formatting of each slide based on the JSON content generated by the AI model.
+
+### Detailed Steps
+
+1. **Initialization**:
+   - The `PPTGenerator` class is initialized with the AI client, models, and system prompts. It also sets up the template engine with the specified color scheme.
+
+2. **Generating Schema**:
+   - The `generateSchema` method sends a prompt to the AI model to generate the presentation schema. It returns a JSON object representing the structure of the presentation.
+
+3. **Generating Slides**:
+   - The `generateSlide` method generates the content for each slide based on the schema. It sends the slide title and description to the AI model, which returns a JSON object representing the slide's layout and content.
+
+4. **Generating Images**:
+   - The `generateImage` method generates images based on text prompts using the AI model. It returns the path to the generated image.
+
+5. **Assembling the Presentation**:
+   - The `generatePresentation` method assembles the slides into a final PowerPoint presentation using the `PptxTemplateEngine`. It handles the layout and formatting of each slide based on the JSON content generated by the AI model.
+
+### AI Process
+
+The AI process involves several steps to generate the content for each slide:
+
+1. **Schema Generation**:
+   - The AI model generates the overall structure of the presentation, including the number of slides and their types. This is done by sending a prompt to the AI model, which returns a JSON object representing the schema.
+
+2. **Slide Generation**:
+   - For each slide in the schema, the AI model generates the content based on the slide title and description. This is done by sending the slide title and description to the AI model, which returns a JSON object representing the slide's layout and content.
+
+3. **Image Generation**:
+   - If a slide requires an image, the AI model generates the image based on a text prompt. This is done by sending the text prompt to the AI model, which returns the path to the generated image.
+
+4. **Presentation Assembly**:
+   - The `PptxTemplateEngine` assembles the slides into a final PowerPoint presentation. It handles the layout and formatting of each slide based on the JSON content generated by the AI model.
+
+### Summary
+
+The `ppt_generator` module leverages AI models to generate PowerPoint presentations. It uses the `together-ai` library for AI-driven content generation and the `PptxTemplateEngine` for creating presentation slides. The module handles the initialization, schema generation, slide generation, image generation, and assembly of the final presentation.
+
+This approach ensures that the `ppt_generator` module can efficiently and effectively generate PowerPoint presentations with AI-driven content.
+
+## Features
+
+- AI-driven content generation
+- Customizable themes
+- Image generation based on text prompts
+- Flexible layouts for slides
+
+## Usage PPT Generator
+
+1. Start the application:
+   ```sh
+   npm start
+   ```
+
+2. The application will start at port 8080. You can do a post request to the `/generate/ppt` route with the following payload.
+    ```json
+    {
+      "prompt": "Your presentation prompt"
+    }
+    ```
+
+- **Note**: PPT's are saved in the **`public`** directory.
 
 
 ## Installation
@@ -153,24 +274,6 @@ This approach ensures that the web crawler can efficiently and effectively extra
    API_KEY=TOGETHER_AI_API_KEY
    ```
 
-## Usage
-
-1. Start the application:
-   ```sh
-   npm start
-   ```
-
-2. The application will start at port 8080. You can do a post request to the `/webcrawler` route with the following payload.
-
-```json
-{
-  "link":"https://example.com",
-  "source" : 0, // 0 for Meta Llama 3.3 Turbo Instruct , 1 for DeepSeek R1
-  "prompt": "Please extract the following data:"
-}
-
-```
-
 ## Dependencies
 
 The project uses the following dependencies:
@@ -183,6 +286,7 @@ The project uses the following dependencies:
 - `random-useragent`: ^0.5.0
 - `sqlite3`: ^5.1.7 -> `For future use cases 😀`
 - `together-ai`: ^0.13.0
+- `pptxgenjs`: ^3.1.0
 
 ## Contributing
 
