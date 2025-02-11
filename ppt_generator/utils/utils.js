@@ -5,20 +5,25 @@ function sleep(ms) {
 
 // Function to sanitize and parse JSON from AI response
 function sanitizeAndParseJson(jsonString) {
+  // Try to parse the string directly as JSON.
   try {
     return JSON.parse(jsonString);
-  } catch (e) {
-    const jsonMatch = jsonString.match(/```json\s*([\s\S]+?)\s*```/);
-    if (jsonMatch) {
+  } catch (initialError) {
+    // If direct parsing fails, try to extract JSON from a markdown code block.
+    // This regex matches triple backticks with an optional "json" specifier.
+    const codeBlockRegex = /```(?:json\s*)?\n?([\s\S]*?)\n?```/i;
+    const match = jsonString.match(codeBlockRegex);
+    if (match) {
       try {
-        return JSON.parse(jsonMatch[1].trim());
-      } catch (e2) {
-        console.error("Error parsing extracted JSON:", e2);
-        return null;
+        return JSON.parse(match[1].trim());
+      } catch (codeBlockError) {
+        throw new Error(
+          `Error parsing JSON from extracted code block: ${codeBlockError.message}`
+        );
       }
     }
-    console.error("Error parsing JSON string:", e);
-    return null;
+    // If no code block is found, throw the original error.
+    throw new Error(`Invalid JSON input: ${initialError.message}`);
   }
 }
 
